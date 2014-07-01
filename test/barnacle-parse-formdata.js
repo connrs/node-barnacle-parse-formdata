@@ -54,6 +54,23 @@ test('Emits object with data from POST', function (t) {
   pt.end('where=here');
 });
 
+test('Emits object with data from params', function (t) {
+  t.plan(1);
+
+  var pfd = new ParseFormData({ params: 'beepboop' });
+  var pt = new PassThrough();
+
+  pt.url = 'http://example.com';
+  pt.headers = {
+    'content-type': 'application/x-www-form-urlencoded'
+  };
+  pfd.on('data', function (obj) {
+    t.equal(obj.params, 'beepboop');
+  });
+  pt.pipe(pfd);
+  pt.end('where=here');
+});
+
 test('Emits object with data from JSON', function (t) {
   t.plan(1);
 
